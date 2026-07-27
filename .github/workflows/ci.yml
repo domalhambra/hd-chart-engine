@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  pull_request:
+    paths-ignore: ['**.md']
+
+# A new push to the same branch cancels the run it supersedes. This is the one
+# setting that actually saves runner minutes at any real push cadence.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 20 is the floor declared in package.json engines. Testing the floor
+      # catches more than testing the newest release does: if it passes here it
+      # will almost certainly pass on 22 and 24. Add a matrix if that stops
+      # being true.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run typecheck
+
+      # Build BEFORE test on purpose. tests/bundle-boundary.test.ts inspects
+      # dist/ and skips when it is absent, so running the suite first would
+      # silently skip the checks that prove the GPL dependency stays out of the
+      # MIT entry point. Building first means one vitest run covers everything.
+      - run: npm run build
+
+      - run: npm test
+
+      - name: Verify the publish tarball contents
+        run: npm pack --dry-run

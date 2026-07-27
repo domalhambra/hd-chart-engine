@@ -1,5 +1,7 @@
 # hd-chart-engine
 
+[![CI](https://github.com/domalhambra/hd-chart-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/domalhambra/hd-chart-engine/actions/workflows/ci.yml)
+
 A Human Design chart engine for JavaScript and TypeScript. Give it a birth moment, get gate, line, color, tone and base for all 13 bodies on both the Personality and Design sides.
 
 ```js

@@ -1,0 +1,40 @@
+name: Validate against Swiss Ephemeris
+
+# Manual only. This spawns a tsx subprocess per chart per engine, 60 in all, so
+# it runs in minutes rather than seconds and has no business on every push. The
+# accuracy it measures changes when an engine or a dependency changes, not when
+# application code does.
+#
+# Run it after: bumping astronomy-engine or ephemeris, touching anything under
+# src/ephemeris/, or before cutting a release.
+#
+# Note this uses pyswisseph in Moshier mode, with no .se1 data files. That is an
+# approximation sharing its theory with the moshier engine, so it flatters that
+# column. A real JPL DE431 oracle needs the Swiss data files and EPHE_PATH, and
+# those are not redistributable here.
+on:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: npm ci
+      - run: pip install pyswisseph
+
+      - name: Accurate engine (patched Moshier)
+        run: python3 scripts/validate-chart.py --engine moshier
+
+      - name: Default engine (astronomy-engine, MIT)
+        run: python3 scripts/validate-chart.py --engine astronomy

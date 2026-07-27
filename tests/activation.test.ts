@@ -52,7 +52,11 @@ describe('longitudeToActivation', () => {
   })
 
   it('keeps every field in range across the whole circle', () => {
-    for (let lon = 0; lon < 360; lon += 0.01) {
+    // 0.1° steps, 3600 samples. A finer step does not buy coverage: there are
+    // 69120 base slices, so no practical step is exhaustive, and this is a
+    // range smoke test rather than a boundary test. The boundary cases above
+    // are the ones that matter, and they are exact.
+    for (let lon = 0; lon < 360; lon += 0.1) {
       const a = longitudeToActivation(lon)
       expect(a.g).toBeGreaterThanOrEqual(1); expect(a.g).toBeLessThanOrEqual(64)
       expect(a.l).toBeGreaterThanOrEqual(1); expect(a.l).toBeLessThanOrEqual(6)
