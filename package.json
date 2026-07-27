@@ -1,0 +1,61 @@
+{
+  "name": "hd-chart-engine",
+  "version": "0.1.0",
+  "description": "Human Design chart engine. Gate, line, color, tone and base activations from a birth moment, with no Swiss Ephemeris dependency.",
+  "license": "MIT",
+  "author": "Dom Alhambra",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "human-design",
+    "astrology",
+    "ephemeris",
+    "bodygraph",
+    "natal-chart",
+    "moshier"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./moshier": {
+      "types": "./dist/moshier-entry.d.ts",
+      "import": "./dist/moshier-entry.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/ephemeris/moshier-entry.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "astronomy-engine": "^2.1.19",
+    "luxon": "^3.7.2"
+  },
+  "peerDependencies": {
+    "ephemeris": "^2.2.0"
+  },
+  "peerDependenciesMeta": {
+    "ephemeris": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^22.10.0",
+    "ephemeris": "^2.2.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  }
+}
