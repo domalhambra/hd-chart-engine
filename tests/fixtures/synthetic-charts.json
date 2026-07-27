@@ -1,0 +1,279 @@
+{
+  "v": 1,
+  "generated_at": "2026-05-08T22:21:16.531Z",
+  "charts": [
+    {
+      "id": "span-1905",
+      "place": "Vienna, Austria",
+      "date": "1905-03-14",
+      "time": "10:00",
+      "lat": 48.2083537,
+      "lon": 16.3725042,
+      "tz": "Europe/Vienna"
+    },
+    {
+      "id": "span-1920",
+      "place": "Buenos Aires, Argentina",
+      "date": "1920-08-22",
+      "time": "21:45",
+      "lat": -34.6095579,
+      "lon": -58.3887904,
+      "tz": "America/Argentina/Buenos_Aires"
+    },
+    {
+      "id": "span-1945",
+      "place": "Tokyo, Japan",
+      "date": "1945-08-09",
+      "time": "11:02",
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "tz": "Asia/Tokyo"
+    },
+    {
+      "id": "span-1965",
+      "place": "Reykjavík, Iceland",
+      "date": "1965-06-21",
+      "time": "04:15",
+      "lat": 64.145981,
+      "lon": -21.9422367,
+      "tz": "Africa/Abidjan"
+    },
+    {
+      "id": "span-1985",
+      "place": "Cape Town, South Africa",
+      "date": "1985-12-31",
+      "time": "23:59",
+      "lat": -33.9288301,
+      "lon": 18.4172197,
+      "tz": "Africa/Johannesburg"
+    },
+    {
+      "id": "span-1999",
+      "place": "Sydney, Australia",
+      "date": "1999-09-15",
+      "time": "14:30",
+      "lat": -33.8698439,
+      "lon": 151.2082848,
+      "tz": "Australia/Sydney"
+    },
+    {
+      "id": "hemi-n-1",
+      "place": "Anchorage, Alaska",
+      "date": "1972-06-15",
+      "time": "23:00",
+      "lat": 61.2163129,
+      "lon": -149.894852,
+      "tz": "America/Anchorage"
+    },
+    {
+      "id": "hemi-n-2",
+      "place": "Helsinki, Finland",
+      "date": "1968-12-21",
+      "time": "12:00",
+      "lat": 60.1666204,
+      "lon": 24.9435408,
+      "tz": "Europe/Helsinki",
+      "note": "polar winter solstice"
+    },
+    {
+      "id": "hemi-s-1",
+      "place": "Hobart, Tasmania",
+      "date": "1978-12-22",
+      "time": "03:15",
+      "lat": -42.8825088,
+      "lon": 147.3281233,
+      "tz": "Australia/Hobart"
+    },
+    {
+      "id": "hemi-s-2",
+      "place": "Punta Arenas, Chile",
+      "date": "1991-06-22",
+      "time": "15:30",
+      "lat": -53.1625688,
+      "lon": -70.907822,
+      "tz": "America/Punta_Arenas"
+    },
+    {
+      "id": "hemi-eq-1",
+      "place": "Quito, Ecuador",
+      "date": "2000-03-20",
+      "time": "12:00",
+      "lat": -0.2201641,
+      "lon": -78.5123274,
+      "tz": "America/Guayaquil"
+    },
+    {
+      "id": "hemi-eq-2",
+      "place": "Singapore",
+      "date": "1980-09-23",
+      "time": "06:00",
+      "lat": 1.357107,
+      "lon": 103.8194992,
+      "tz": "Asia/Singapore"
+    },
+    {
+      "id": "dst-spring",
+      "place": "New York, NY",
+      "date": "1995-04-02",
+      "time": "02:30",
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "tz": "America/New_York",
+      "note": "spring-forward hour"
+    },
+    {
+      "id": "dst-fall",
+      "place": "New York, NY",
+      "date": "1995-10-29",
+      "time": "01:30",
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "tz": "America/New_York",
+      "note": "fall-back ambiguous"
+    },
+    {
+      "id": "leap-day",
+      "place": "London, UK",
+      "date": "2000-02-29",
+      "time": "12:00",
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "tz": "Europe/London"
+    },
+    {
+      "id": "year-edge",
+      "place": "Auckland, New Zealand",
+      "date": "1999-12-31",
+      "time": "23:55",
+      "lat": -36.852095,
+      "lon": 174.7631803,
+      "tz": "Pacific/Auckland"
+    },
+    {
+      "id": "epoch-utc",
+      "place": "Greenwich, UK",
+      "date": "1970-01-01",
+      "time": "00:00",
+      "lat": 51.4820845,
+      "lon": -0.0045417,
+      "tz": "Europe/London"
+    },
+    {
+      "id": "pre-epoch",
+      "place": "Paris, France",
+      "date": "1942-11-11",
+      "time": "03:33",
+      "lat": 48.8534951,
+      "lon": 2.3483915,
+      "tz": "Europe/Paris"
+    },
+    {
+      "id": "arc-eq-mar",
+      "place": "Cairo, Egypt",
+      "date": "1980-03-21",
+      "time": "08:00",
+      "lat": 30.0443879,
+      "lon": 31.2357257,
+      "tz": "Africa/Cairo"
+    },
+    {
+      "id": "arc-sol-jun",
+      "place": "Mumbai, India",
+      "date": "1980-06-22",
+      "time": "08:00",
+      "lat": 19.054999,
+      "lon": 72.8692035,
+      "tz": "Asia/Kolkata"
+    },
+    {
+      "id": "arc-eq-sep",
+      "place": "Lagos, Nigeria",
+      "date": "1980-09-23",
+      "time": "08:00",
+      "lat": 6.4550575,
+      "lon": 3.3941795,
+      "tz": "Africa/Lagos"
+    },
+    {
+      "id": "arc-sol-dec",
+      "place": "Lima, Peru",
+      "date": "1980-12-22",
+      "time": "08:00",
+      "lat": -12.0459808,
+      "lon": -77.0305912,
+      "tz": "America/Lima"
+    },
+    {
+      "id": "arc-mid-jul",
+      "place": "Madrid, Spain",
+      "date": "1980-07-15",
+      "time": "12:00",
+      "lat": 40.416782,
+      "lon": -3.703507,
+      "tz": "Europe/Madrid"
+    },
+    {
+      "id": "arc-mid-jan",
+      "place": "Reykjavík, Iceland",
+      "date": "1980-01-15",
+      "time": "12:00",
+      "lat": 64.145981,
+      "lon": -21.9422367,
+      "tz": "Africa/Abidjan"
+    },
+    {
+      "id": "gb-1",
+      "place": "Berlin, Germany",
+      "date": "1988-10-09",
+      "time": "05:30",
+      "lat": 52.5173885,
+      "lon": 13.3951309,
+      "tz": "Europe/Berlin"
+    },
+    {
+      "id": "gb-2",
+      "place": "Boise, Idaho",
+      "date": "1988-10-09",
+      "time": "05:30",
+      "lat": 43.6166163,
+      "lon": -116.200886,
+      "tz": "America/Boise"
+    },
+    {
+      "id": "gb-3",
+      "place": "Mexico City, Mexico",
+      "date": "1990-04-15",
+      "time": "10:00",
+      "lat": 19.3207722,
+      "lon": -99.1514678,
+      "tz": "America/Mexico_City"
+    },
+    {
+      "id": "gb-4",
+      "place": "Athens, Greece",
+      "date": "1975-05-15",
+      "time": "20:00",
+      "lat": 37.9755648,
+      "lon": 23.7348324,
+      "tz": "Europe/Athens"
+    },
+    {
+      "id": "gb-5",
+      "place": "Moscow, Russia",
+      "date": "1962-09-23",
+      "time": "08:00",
+      "lat": 55.625578,
+      "lon": 37.6063916,
+      "tz": "Europe/Moscow"
+    },
+    {
+      "id": "gb-6",
+      "place": "Bangkok, Thailand",
+      "date": "1958-02-19",
+      "time": "23:00",
+      "lat": 13.7524938,
+      "lon": 100.4935089,
+      "tz": "Asia/Jakarta"
+    }
+  ]
+}
