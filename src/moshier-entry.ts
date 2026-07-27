@@ -10,7 +10,7 @@
  * what makes base meaningful. The MIT default engine is accurate through color
  * and usually tone, but not base.
  */
-export { createMoshierEngine, computeBodyLongitudes, sunLongitude } from './moshier'
+export { createMoshierEngine, computeBodyLongitudes, sunLongitude } from './ephemeris/moshier'
 export type {
   EphemerisEngine, Convention, PlanetKey, BodyLongitudes,
-} from './types'
+} from './ephemeris/types'
