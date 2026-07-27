@@ -33,10 +33,14 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts src/ephemeris/moshier-entry.ts --format esm --dts --clean",
+    "build": "tsup src/index.ts src/moshier-entry.ts --format esm --dts --clean",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "chart": "tsx scripts/calculate-chart.ts",
+    "validate": "python3 scripts/validate-chart.py --engine moshier && python3 scripts/validate-chart.py --engine astronomy",
+    "validate:moshier": "python3 scripts/validate-chart.py --engine moshier",
+    "validate:astronomy": "python3 scripts/validate-chart.py --engine astronomy"
   },
   "dependencies": {
     "astronomy-engine": "^2.1.19",
@@ -55,6 +59,7 @@
     "@types/node": "^22.10.0",
     "ephemeris": "^2.2.0",
     "tsup": "^8.3.5",
+    "tsx": "^4.23.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.10"
   }
