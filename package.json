@@ -5,6 +5,17 @@
   "license": "MIT",
   "author": "Dom Alhambra",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domalhambra/hd-chart-engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/domalhambra/hd-chart-engine/issues"
+  },
+  "homepage": "https://github.com/domalhambra/hd-chart-engine#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=20"
   },
@@ -34,6 +45,7 @@
   },
   "scripts": {
     "build": "tsup src/index.ts src/moshier-entry.ts --format esm --dts --clean",
+    "prepublishOnly": "npm run build && npm test && npm run typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
