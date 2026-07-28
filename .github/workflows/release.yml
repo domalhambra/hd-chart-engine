@@ -1,0 +1,70 @@
+name: Release
+
+# Publishes to npm over OIDC trusted publishing. No token is stored anywhere:
+# npm verifies this workflow's identity directly with GitHub, which is why
+# `id-token: write` below is load-bearing rather than boilerplate.
+#
+# Requires a trusted publisher configured on npmjs.com for this package,
+# pointing at this repository and this workflow filename. Without it the
+# publish step fails with an auth error even though everything here is correct.
+#
+# To cut a release:
+#   npm version patch   (or minor / major) — commits and tags
+#   git push --follow-tags
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # the OIDC token npm exchanges for publish rights
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 24 rather than the CI workflow's Node 20, because OIDC trusted
+      # publishing needs npm >= 11.5.1 and Node 20 ships npm 10.x. The explicit
+      # upgrade below covers the case where the bundled npm is still too old.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: Ensure npm supports trusted publishing
+        run: |
+          npm install -g npm@latest
+          npm --version
+
+      - run: npm ci
+
+      # Refuse to publish a tag that disagrees with package.json. Getting this
+      # wrong burns a version number permanently, since npm does not allow
+      # reuse even after an unpublish.
+      - name: Verify the tag matches package.json
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "tag v$TAG does not match package.json $PKG"
+            exit 1
+          fi
+          echo "version $PKG"
+
+      - run: npm run typecheck
+
+      # Build before test: tests/bundle-boundary.test.ts inspects dist/ and
+      # skips when it is absent, and those are the checks that prove the GPL
+      # dependency stays out of the MIT entry point. Same ordering as CI.
+      - run: npm run build
+
+      - run: npm test
+
+      # --provenance publishes a signed attestation linking the tarball to this
+      # commit and workflow, which is the main reason to prefer OIDC over a token.
+      - run: npm publish --provenance --access public

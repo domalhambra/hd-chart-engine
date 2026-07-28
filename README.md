@@ -125,6 +125,16 @@ npm run chart -- --lat=30.4213 --lon=-87.2169 --tz=America/Chicago \
 
 The validator keeps its own independent encoding of the wheel constants and the 64-gate sequence, and deliberately does not import `src/wheel.ts`. Sharing them would make it a tautology.
 
+## Releasing
+
+Releases publish from CI over OIDC trusted publishing, so no npm token exists on any machine or in any secret.
+
+```bash
+npm version patch && git push --follow-tags
+```
+
+The tag triggers `.github/workflows/release.yml`, which refuses to publish if the tag disagrees with `package.json`, then runs typecheck, build and the full suite before publishing with `--provenance`. The attestation links the published tarball to the exact commit and workflow that produced it.
+
 ## License
 
 MIT. See [LICENSE](LICENSE), and [NOTICE.md](NOTICE.md) for the GPL-3.0 sub-path and third-party components.
