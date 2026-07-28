@@ -9,7 +9,7 @@ name: Release
 # publish step fails with an auth error even though everything here is correct.
 #
 # To cut a release:
-#   npm version patch   (or minor / major) — commits and tags
+#   npm version patch   (or minor / major), which commits and tags
 #   git push --follow-tags
 on:
   push:
