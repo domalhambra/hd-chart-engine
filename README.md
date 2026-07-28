@@ -1,8 +1,15 @@
 # hd-chart-engine
 
 [![CI](https://github.com/domalhambra/hd-chart-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/domalhambra/hd-chart-engine/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/hd-chart-engine)](https://www.npmjs.com/package/hd-chart-engine)
 
 A Human Design chart engine for JavaScript and TypeScript. Give it a birth moment, get gate, line, color, tone and base for all 13 bodies on both the Personality and Design sides.
+
+```bash
+npm install hd-chart-engine
+```
+
+That pulls MIT dependencies only. See [Choosing an engine](#choosing-an-engine) for the higher-accuracy path.
 
 ```js
 import { calculateChart } from 'hd-chart-engine'
