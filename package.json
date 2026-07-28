@@ -1,6 +1,6 @@
 {
   "name": "hd-chart-engine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Human Design chart engine. Gate, line, color, tone and base activations from a birth moment, with no Swiss Ephemeris dependency.",
   "license": "MIT",
   "author": "Dom Alhambra",
