@@ -54,7 +54,7 @@ describe('moshier engine', () => {
   // this fails loudly rather than silently degrading base.
   // Reference values from pyswisseph FLG_SWIEPH; see docs/ephemeris-ground-truth.md.
   it('matches Swiss Ephemeris to < 3 arc-seconds at a historical moment', () => {
-    // JD 2447956.5 is 1990-03-06 00:00 UT. The comment inherited from Badwater HD
+    // JD 2447956.5 is 1990-03-06 00:00 UT. The comment inherited from Plateworks HD
     // said 1990-01-27, which is JD 2447918.5. The reference values below belong
     // to 2447956.5; only the comment was wrong.
     const lons = engine.bodyLongitudes(2447956.5)

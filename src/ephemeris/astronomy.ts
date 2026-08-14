@@ -6,7 +6,7 @@
  * which is the Human Design convention. See ./types.ts for how that was
  * settled.
  *
- * The earlier Badwater HD code ran this engine GEOMETRIC, which put 2 of 104
+ * The earlier Plateworks HD code ran this engine GEOMETRIC, which put 2 of 104
  * fixture lines on the wrong side of a boundary. Do not pass `false` here. At
  * the reference moment below, geometric is 21.1″ from Swiss on the Sun where
  * apparent is 0.46″, so the difference is not subtle once you measure it.

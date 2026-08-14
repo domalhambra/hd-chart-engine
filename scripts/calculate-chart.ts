@@ -6,7 +6,7 @@
  * be piped or diffed. `--verbose` adds the raw longitudes, which is what
  * validate-chart.py parses.
  *
- * Unlike the Badwater HD original this takes coordinates directly and does no
+ * Unlike the Plateworks HD original this takes coordinates directly and does no
  * geocoding. Resolving a place name to a lat/lon and IANA zone needs geo-tz and
  * a network call, and neither belongs in a library that has to run in a browser.
  *

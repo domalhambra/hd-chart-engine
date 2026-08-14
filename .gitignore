@@ -4,6 +4,6 @@ dist/
 .DS_Store
 
 # Internal planning artifacts. Kept on disk, deliberately out of the public
-# repo: they carry local filesystem paths and Badwater workspace strategy.
+# repo: they carry local filesystem paths and Plateworks workspace strategy.
 PROJECT_CHARTER.md
 docs/superpowers/

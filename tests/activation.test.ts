@@ -7,7 +7,7 @@ describe('longitudeToActivation', () => {
     expect(longitudeToActivation(WHEEL_START)).toEqual({ g: 1, l: 1, c: 1, t: 1, b: 1 })
   })
 
-  // Cross-checks against the printed wheel, carried over from Badwater HD.
+  // Cross-checks against the printed wheel, carried over from Plateworks HD.
   it("places gate 56 line 5 at 120.5° (00°07'30\" Leo)", () => {
     const a = longitudeToActivation(120.5)
     expect(a.g).toBe(56)

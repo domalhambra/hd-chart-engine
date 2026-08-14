@@ -5,7 +5,7 @@ Date: 2026-05-06
 > **Historical (added 2026-07-27 during extraction).**
 >
 > This is the original validation of the `astronomy-engine` calculator inside
-> the Badwater HD site, run on the GEOMETRIC convention, which was later shown
+> the Plateworks HD site, run on the GEOMETRIC convention, which was later shown
 > to be the wrong one for Human Design. Its numbers are kept as a record of how
 > the calculator was validated at the time, not as a current accuracy claim.
 >

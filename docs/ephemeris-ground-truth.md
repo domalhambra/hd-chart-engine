@@ -4,7 +4,7 @@ Date: 2026-06-20
 
 > **Read this first (added 2026-07-27 during extraction).**
 >
-> This report was written inside the Badwater HD site, when there was exactly
+> This report was written inside the Plateworks HD site, when there was exactly
 > one engine and "the production engine" meant whichever one had most recently
 > been swapped in. This package now ships two, so read every mention of "the
 > production engine" against the timeline: sections up to the 2026-06-21 swap

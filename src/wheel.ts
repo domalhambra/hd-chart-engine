@@ -16,7 +16,7 @@
  * 33", or 1.8 base slices.
  *
  * Gate order is fixed by the system and is not the numeric sequence. Transcribed
- * from the Badwater HD encyclopedia's wheel index and verified against each
+ * from the Plateworks HD encyclopedia's wheel index and verified against each
  * gate's recorded starting longitude.
  */
 
