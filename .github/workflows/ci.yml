@@ -2,7 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # `claude/**` too: cloud sessions push there and never to main, so without it
+    # their work is unverified until a human opens the PR — the gate fires after
+    # the decision it was meant to inform.
+    branches: [main, "claude/**"]
     paths-ignore: ['**.md']
   pull_request:
     paths-ignore: ['**.md']
