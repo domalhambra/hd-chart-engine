@@ -3,7 +3,9 @@
 [![CI](https://github.com/domalhambra/hd-chart-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/domalhambra/hd-chart-engine/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/hd-chart-engine)](https://www.npmjs.com/package/hd-chart-engine)
 
-A Human Design chart engine for JavaScript and TypeScript. Give it a birth moment, get gate, line, color, tone and base for all 13 bodies on both the Personality and Design sides.
+A Human Design chart engine for JavaScript and TypeScript. Give it a birth moment, get gate, line, color, tone and base for all 13 bodies on both the Personality and Design sides. It is a TypeScript library, built with tsup and tested with vitest, published to npm as one package with two entry points: an MIT default and an opt-in GPL-3.0 path for higher accuracy.
+
+## Run it
 
 ```bash
 npm install hd-chart-engine
@@ -28,6 +30,13 @@ chart.precision.base    // 'estimate' at minute precision
 ```
 
 Resolving a place name to coordinates and an IANA zone is your job. That needs a network call or a multi-megabyte timezone shapefile, and neither belongs in a library that has to run in a browser.
+
+From a checkout, one chart at the command line:
+
+```bash
+npm run chart -- --lat=30.4213 --lon=-87.2169 --tz=America/Chicago \
+                 --date=1993-10-18 --time=01:30 --engine=moshier
+```
 
 ## Why this exists
 
@@ -113,27 +122,45 @@ This package returns activations. Bodygraph rendering, Type and Authority deriva
 
 Supported range is 1800 to 2200.
 
-## Development
+## Prove a change
 
 ```bash
-npm test              # 114 tests
-npm run typecheck
+npm run build         # tsup. Build first: the bundle-boundary tests skip without dist/
+npm test              # vitest: 119 tests; 4 skip without a build, so a clone shows 115 passing
+npm run typecheck     # tsc --noEmit over src, tests and scripts
 npm run validate      # both engines against pyswisseph, needs `pip install pyswisseph`
-npm run chart -- --lat=30.4213 --lon=-87.2169 --tz=America/Chicago \
-                 --date=1993-10-18 --time=01:30 --engine=moshier
 ```
+
+`npm test` includes the docs check: `tests/docs.test.ts` runs
+`scripts/docs_check.py` with `--require docs/architecture.md`,
+`--require docs/changing-things.md`, `--require docs/decisions.md`,
+`--known-absent PROJECT_CHARTER.md`, and
+`--known-absent docs/superpowers/plans/`. It fails when a document under
+`docs/` is not indexed, a quoted path does not exist, or `CLAUDE.md` reaches
+its 2,000-token budget.
 
 The validator keeps its own independent encoding of the wheel constants and the 64-gate sequence, and deliberately does not import `src/wheel.ts`. Sharing them would make it a tautology.
 
-## Releasing
+## Ship it
 
-Releases publish from CI over OIDC trusted publishing, so no npm token exists on any machine or in any secret.
+There is no host. The deliverable is the npm package. Releases publish from CI over OIDC trusted publishing, so no npm token exists on any machine or in any secret.
 
 ```bash
 npm version patch && git push --follow-tags
 ```
 
-The tag triggers `.github/workflows/release.yml`, which refuses to publish if the tag disagrees with `package.json`, then runs typecheck, build and the full suite before publishing with `--provenance`. The attestation links the published tarball to the exact commit and workflow that produced it.
+The tag triggers `.github/workflows/release.yml`, which refuses to publish if the tag disagrees with `package.json`. It then runs typecheck, build and the full suite before publishing with `--provenance`. The attestation links the published tarball to the exact commit and workflow that produced it. The full procedure, including the trusted-publisher prerequisite, is in `docs/changing-things.md`.
+
+## Where to go next
+
+| You want to | Read |
+|---|---|
+| Change anything, and know the rules first | [CLAUDE.md](CLAUDE.md) |
+| Learn which file owns what, and how the package ships | [docs/architecture.md](docs/architecture.md) |
+| Do a specific task: an engine bump, the wheel math, a fixture, a release | [docs/changing-things.md](docs/changing-things.md) |
+| Know why something is the way it is | [docs/decisions.md](docs/decisions.md) |
+| The evidence behind the accuracy tables above | [docs/ephemeris-ground-truth.md](docs/ephemeris-ground-truth.md), [docs/chart-validation-report.md](docs/chart-validation-report.md) |
+| Everything else, including the specs | [docs/README.md](docs/README.md) |
 
 ## License
 

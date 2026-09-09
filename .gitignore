@@ -2,8 +2,10 @@ node_modules/
 dist/
 *.se1
 .DS_Store
+__pycache__/
 
 # Internal planning artifacts. Kept on disk, deliberately out of the public
 # repo: they carry local filesystem paths and Plateworks workspace strategy.
+# Specs under docs/superpowers/specs/ are tracked; a clone needs them.
 PROJECT_CHARTER.md
-docs/superpowers/
+docs/superpowers/plans/

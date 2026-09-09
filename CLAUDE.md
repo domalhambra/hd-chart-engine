@@ -1,73 +1,63 @@
-# CLAUDE.md — HD Chart Engine
+# HD Chart Engine
 
-Operator manual for Claude. The human entry point is `README.md`; the project history and the decisions behind it are in `PROJECT_CHARTER.md`. Read the README before nontrivial work here — its accuracy tables are the package's only credibility.
+`hd-chart-engine`: a public, MIT-licensed Human Design chart engine for JavaScript and TypeScript. A birth moment (date, time, latitude, longitude, IANA zone) goes in. Gate, line, color, tone, and base for all 13 bodies on both sides come out. Every other accurate engine routes through the Swiss Ephemeris (AGPL or paid). Here Swiss is only a development-time oracle, never distributed, never linked. A TypeScript library (vitest, tsup) published to npm with two entry points. The human entry point is `README.md`. The charter is private: `PROJECT_CHARTER.md` is a gitignored pointer, so a clone lacks it.
 
-## What this project is
+This file is a router: the rules that must not break, and the one document to read for each change. Everything else lives in `docs/`, indexed at `docs/README.md`.
 
-`hd-chart-engine`: a public, MIT-licensed Human Design chart engine for JavaScript and TypeScript. It turns a birth moment (date, time, latitude, longitude, IANA zone) into gate, line, color, tone and base for all 13 bodies on both the Personality and Design sides.
+## Read this before changing that
 
-It exists because every other accurate HD engine routes through Swiss Ephemeris (AGPL or paid). This one does not depend on it. Swiss appears only as a development-time accuracy oracle, never distributed and never linked.
-
-- GitHub: `domalhambra/hd-chart-engine` (public, MIT). npm: `hd-chart-engine`.
-- This folder is an independent git repo. It is not part of `plateworks-os`.
-
-**The folder keeps its `Badwater ` prefix on purpose; the package does not.** Repo and npm names are deliberately brand-neutral so anyone can adopt the package. Do not add a brand prefix to the package, and do not rename the folder — the workspace `CLAUDE.md` Projects table routes on this exact folder name. (This repo uses an ordinary `.git` directory, not an external store, so the pointer-file hazard that applies to `badwater-{os,hd,pkm}` does not apply here.)
-
-## The engine split (the rule that shapes everything)
-
-Two ephemeris engines, two licenses. Keep them apart.
-
-| Path | Engine | License | What it can assert |
-|---|---|---|---|
-| Default — `hd-chart-engine` | `astronomy-engine` | MIT | Gate, line and color. Never reports base as reliable. |
-| Opt-in — `hd-chart-engine/moshier` | `ephemeris` (patched Moshier) | GPL-3.0 | Sub-arcsecond on direct bodies; base becomes meaningful at second-precision birth times. |
-
-- `ephemeris` is an **optional peer dependency**. Nothing reachable from the default entry point may import it. `tests/licensing-boundary.test.ts` fails the build if that changes. Never "simplify" by importing the Moshier path from `src/index.ts`.
-- Importing the `moshier` sub-path puts the consumer's combined work under GPL-3.0. Serving that JavaScript to a browser is distribution. Say so plainly in any doc that mentions the sub-path.
-
-## Where the math lives
-
-| Path | What |
+| Changing | Read first |
 |---|---|
-| `src/ephemeris/astronomy.ts` | the MIT engine — apparent ecliptic longitudes |
-| `src/ephemeris/moshier.ts` | the GPL engine, plus the time-base fix (input is UT, upstream assumes TT) |
-| `src/ephemeris/delta-t.ts` | ΔT, which the time-base fix depends on |
-| `src/wheel.ts` | the 64-gate sequence and the slice widths — the wheel math |
-| `src/activation.ts` | longitude → gate / line / color / tone / base |
-| `src/birth-moment.ts` | DST-aware historical birth-moment resolution |
-| `src/calculator.ts`, `src/index.ts` | `calculateChart`, the public entry point |
-| `scripts/validate-chart.py` | the `pyswisseph` validator (`npm run validate`) |
-| `docs/ephemeris-ground-truth.md` | the per-body DE431 error tables the README cites |
+| Anything, for the first time | `README.md`, then `docs/architecture.md` |
+| An engine or dependency, the wheel or activation math, birth-moment resolution, the API or precision grading, a fixture, a convention, the licensing boundary, a release, a cloud branch, a decision or spec, a new machine | `docs/changing-things.md` (one section per task) |
+| Which file owns a behavior, how the package ships, `EPHE_PATH`, the validator thresholds | `docs/architecture.md` |
+| Any accuracy figure | `README.md` (Accuracy), `scripts/validate-chart.py` (`THRESHOLDS`). The table comes from `npm run validate`, not from the parity test. |
+| A dependency, after `docs/changing-things.md` | `NOTICE.md`, for the licensing note |
+| Something that looks like a past decision | `docs/decisions.md` |
+| How this repo is documented | `docs/superpowers/specs/2026-09-08-documentation-layout-design.md` |
+| A conceptual HD question | Not here: `../Badwater HD/` (design.plateworks.org). This repo answers "what activated", never "what it means". |
 
-## Build & test
+New specs are written into `docs/superpowers/specs/` and added to `docs/README.md`.
 
-```sh
-npm test          # vitest, ~114 tests
-npm run typecheck
-npm run validate  # both engines against pyswisseph — needs `pip install pyswisseph`
-```
+## Invariants
 
-The validator keeps its own copy of the wheel constants and does not import `src/wheel.ts`. That is deliberate: sharing them would make the test a tautology. Do not refactor it to reuse the source.
+1. **The exports map is the licensing boundary.** Nothing reachable from `src/index.ts` may import `src/ephemeris/moshier.ts` or the `ephemeris` package. `tests/licensing-boundary.test.ts` (source) and `tests/bundle-boundary.test.ts` (`dist/`) fail if that changes. `ephemeris` stays an optional peer dependency. Importing `'hd-chart-engine/moshier'` puts the consumer under GPL-3.0, and serving that JavaScript to a browser is distribution. Every doc that explains the sub-path to a consumer says so.
+2. **The validator is independent.** `scripts/validate-chart.py` keeps its own wheel constants and never imports `src/wheel.ts`. Sharing them makes the test a tautology.
+3. **Never state an accuracy figure the harness has not produced.** Re-run `npm run validate` and update the README table in the same change.
+4. **Say what is not asserted.** Base needs a to-the-second birth time on any engine: one minute is about 1.8 base slices. The MIT engine is never base-capable, because its Design Moon error (26.656 arc-seconds) is wider than a base slice. Every chart carries a `precision` object.
+5. **No silent convention changes.** Apparent was settled 2026-06-21 against a Jovian Archive chart (Pensacola 1993-10-18 01:30, Personality Sun 32.5.3.4, base 2). The MIT engine throws on geometric. Any change gets the same empirical treatment.
+6. **Scope is activations only.** No bodygraph, Type, Authority, Profile, Cross, or interpretation. Meaning lives in the encyclopedia.
+7. **Do not migrate `plateworks-hd` onto this package.** Examined and dropped 2026-07-27. If the math changes, hand-port the diff.
+8. **Names are brand-neutral.** Repo and npm are `hd-chart-engine`. This folder is an independent git repo, and the workspace folder keeps its `Badwater ` prefix because the workspace guide routes on the exact name. Rename neither.
+9. **Releases publish over OIDC trusted publishing with `--provenance`.** No npm token exists anywhere. `release.yml` refuses a tag that disagrees with `package.json`. The trusted publisher on npmjs.com must point at this repo and `release.yml`, or publish fails on auth.
+10. **A cloud branch runs `ci.yml` only.** `claude/**` pushes never run `release.yml`. It takes a `v*` tag or a manual dispatch; a dispatch skips the tag check.
 
-## Guardrails
+## Working here
 
-- **Never state an accuracy figure the harness has not produced.** Re-run `npm run validate` and update the README table in the same change.
-- **Say what is not asserted.** Base needs a to-the-second birth time on any engine. Every chart carries a `precision` object; keep it honest.
-- **No silent convention changes.** Apparent-versus-geometric is settled by measurement against a Jovian Archive chart. Any change gets the same empirical treatment.
-- **Scope is activations only.** Bodygraph rendering, Type and Authority, Profile, Incarnation Cross, and all interpretive content are out of scope. Meaning lives in the encyclopedia.
-- **Conceptual HD questions do not belong here.** What a gate means, how a channel reads, Badwater's own take — route to `Badwater HD/` (design.plateworks.org). This repo answers "what activated", never "what it means".
-- **Do not migrate `plateworks-hd` onto this package.** That milestone was examined and dropped on 2026-07-27; the reasoning is in `PROJECT_CHARTER.md`. Hand-port if the math ever changes.
-
-## Releasing
-
-`npm version patch && git push --follow-tags`. CI publishes over OIDC trusted publishing, so no npm token exists on any machine or in any secret. The workflow refuses to publish if the tag disagrees with `package.json`.
+- `npm run build`, then `npm test` and `npm run typecheck`, before any claim of done. Build first everywhere, CI and release included: 119 tests, of which the four bundle-boundary tests skip without `dist/`.
+- `npm run validate` needs `pip install pyswisseph`. Without `EPHE_PATH` it runs pyswisseph in Moshier mode, which flatters the moshier column. The `.se1` files are gitignored and not redistributable.
+- CI tests the Node 20 floor; release runs on Node 24. vitest is pinned to 3.x: vitest 4's rolldown binding broke `npm ci` on Linux (commit bd207c6).
+- Docs-only pushes run CI. `tests/docs.test.ts` runs `scripts/docs_check.py` with `--known-absent PROJECT_CHARTER.md --known-absent docs/superpowers/plans/`. It path-checks this file, `README.md`, `AGENTS.md`, `docs/README.md` and the top-level docs, and holds this file under 2,000 tokens. Quote a known-absent path from the repo root, prefix included, or the check will not match it on a clone.
+- In docs, quote the sub-path as `'hd-chart-engine/moshier'` or `"./moshier"` (code quotes inside the backticks) and the GitHub repo as `hd-chart-engine` bare. Anything else reads as a dead path.
 
 ## Session logging
 
-Log sessions to the Notion **Session Log** database, parent `{"type": "data_source_id", "data_source_id": "60f3ea17-4424-4815-8a4b-6a4d4de61c4f"}`. Set `Session Title` (title) and `date:Date:start` (ISO date — the expanded property name, not `Date`), plus `Activity` (build | fix | research | write | ops | plan) and `Status` (Complete | In Progress | Blocked). `Quarter` computes itself from Date; never set it by hand.
+Log sessions to the Notion **Session Log** database. Written here on purpose: a cloud container clones only this repo.
 
-**No Notion Repo page is recorded for this repo** (checked 2026-08-17). Leave `Repo` unset and say so in the closing summary. Do not borrow another repo's relation.
+- Parent: `{"type": "data_source_id", "data_source_id": "60f3ea17-4424-4815-8a4b-6a4d4de61c4f"}`
+- `Session Title` (title) and `date:Date:start` (ISO date; the expanded property name, not `Date`)
+- `Repo` — relation. **This repo is** `["https://app.notion.com/p/3bc4f171f47281b19b5ff8a307448d52"]`, the `HD Chart Engine` row in the Repos database. Set it on every session, thread, and decision.
+- `Activity` — build | fix | research | write | ops | plan
+- `Status` — Complete | In Progress | Blocked
+- `Shipped` — checkbox (`"__YES__"`) for releases
+- `Tags` — JSON array **encoded as a string**. A constrained multi-select: a value outside the allowed set fails the whole write. Allowed today: `skill development`, `Notion`, `admin`, `Human Design`, `coaching`, `writing`, `DMIHC`, `Claude`, `Ghost CMS`, `SEO`, `Tecopa Plateworks`. `Human Design` fits this repo; otherwise omit `Tags`.
+- `Quarter` computes itself from Date. Never set it by hand.
 
-`Tags` is a JSON array **encoded as a string**, not a native array, and it is a constrained multi-select. A value outside the allowed set fails the whole write with a `validation_error`. Allowed today: `skill development`, `Notion`, `admin`, `Human Design`, `coaching`, `writing`, `DMIHC`, `Claude`, `Ghost CMS`, `SEO`, `Tecopa Plateworks`. Pick from these; do not invent one. If none fit, omit `Tags`. A missing tag costs nothing; an invented one loses the whole log.
+Body sections: What We Did / Open Threads / Next Steps / Notes.
 
-Body sections: What We Did / Open Threads / Next Steps / Notes. If Notion is unreachable, append the entry to a repo-local `SESSION_LOG.md` (newest first, append-only, never rewrite history) and say so plainly in the summary.
+Also open a **Threads** record for work deliberately left unfinished, and a **Decisions** record for any durable choice. Both relate back to the session page. A Notion decision also gets a row in `docs/decisions.md`.
+
+- **Threads** — data source `a6971fe4-6e13-4699-a0c3-3f23d5d8b552`. `Thread` (title), `Status` (Open | Closed | Dropped), `date:Opened:start`, `Opened in`. Closing one also needs `date:Closed:start`, `Closed in`, and `Resolution`. Close the threads this session resolved.
+- **Decisions** — data source `d6449689-97bd-4b10-9dc7-5d7a3d6b64f5`. `Decision` (title), `Status` (Proposed | Accepted | Superseded), `date:Date:start`, `Context`, `Consequences`, `Made in`. Never delete one; supersede it and link `Supersedes` / `Superseded by`.
+
+**If Notion is unreachable**, append the entry to this repo's own `SESSION_LOG.md` (newest first, append-only) and say so in the closing summary. Confirm the Notion write returned a page ID before reporting the log as done.

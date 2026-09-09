@@ -12,7 +12,7 @@
  * node derivation were tested here and proved bit-identical to the production
  * `L = r × v` (m0) to <0.05" across 60 fixture moments — the node error is the
  * Moon *model*, not the derivation. Those variants were removed; see
- * docs/reference/ephemeris-ground-truth.md for the data and conclusion.
+ * docs/ephemeris-ground-truth.md for the data and conclusion.
  */
 import * as AstronomyNS from 'astronomy-engine'
 import { readFileSync } from 'fs'

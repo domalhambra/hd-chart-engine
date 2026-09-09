@@ -30,7 +30,7 @@ Date: 2026-06-20
 ## Question
 
 The chart calculator uses `astronomy-engine` (pure-JS, bundled client-side).
-Cross-engine validation (`docs/reference/chart-validation-report.md`) flagged
+Cross-engine validation (`chart-validation-report.md`) flagged
 the True Lunar Node as the noisiest body and attributed it to the node
 *derivation* (`L = r × v` vs "a refined integrator"). This investigation asked
 two things:
