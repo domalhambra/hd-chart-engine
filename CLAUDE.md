@@ -42,22 +42,8 @@ New specs are written into `docs/superpowers/specs/` and added to `docs/README.m
 
 ## Session logging
 
-Log sessions to the Notion **Session Log** database. Written here on purpose: a cloud container clones only this repo.
-
-- Parent: `{"type": "data_source_id", "data_source_id": "60f3ea17-4424-4815-8a4b-6a4d4de61c4f"}`
-- `Session Title` (title) and `date:Date:start` (ISO date; the expanded property name, not `Date`)
-- `Repo` — relation. **This repo is** `["https://app.notion.com/p/3bc4f171f47281b19b5ff8a307448d52"]`, the `HD Chart Engine` row in the Repos database. Set it on every session, thread, and decision.
-- `Activity` — build | fix | research | write | ops | plan
-- `Status` — Complete | In Progress | Blocked
-- `Shipped` — checkbox (`"__YES__"`) for releases
-- `Tags` — JSON array **encoded as a string**. A constrained multi-select: a value outside the allowed set fails the whole write. Allowed today: `skill development`, `Notion`, `admin`, `Human Design`, `coaching`, `writing`, `DMIHC`, `Claude`, `Ghost CMS`, `SEO`, `Tecopa Plateworks`. `Human Design` fits this repo; otherwise omit `Tags`.
-- `Quarter` computes itself from Date. Never set it by hand.
-
-Body sections: What We Did / Open Threads / Next Steps / Notes.
-
-Also open a **Threads** record for work deliberately left unfinished, and a **Decisions** record for any durable choice. Both relate back to the session page. A Notion decision also gets a row in `docs/decisions.md`.
-
-- **Threads** — data source `a6971fe4-6e13-4699-a0c3-3f23d5d8b552`. `Thread` (title), `Status` (Open | Closed | Dropped), `date:Opened:start`, `Opened in`. Closing one also needs `date:Closed:start`, `Closed in`, and `Resolution`. Close the threads this session resolved.
-- **Decisions** — data source `d6449689-97bd-4b10-9dc7-5d7a3d6b64f5`. `Decision` (title), `Status` (Proposed | Accepted | Superseded), `date:Date:start`, `Context`, `Consequences`, `Made in`. Never delete one; supersede it and link `Supersedes` / `Superseded by`.
-
-**If Notion is unreachable**, append the entry to this repo's own `SESSION_LOG.md` (newest first, append-only) and say so in the closing summary. Confirm the Notion write returned a page ID before reporting the log as done.
+Log every session to the repo `plateworks-session-log`. Clone it beside this
+one if it is not present. Its convention file, CONVENTION.md, is
+self-contained: format, tag set, and procedure. If the repo is unreachable,
+append the entry to `SESSION_LOG.md` here under a heading saying it belongs in
+the log repo, and say the push is pending.
