@@ -15,7 +15,7 @@ This file is a router: the rules that must not break, and the one document to re
 | A dependency, after `docs/changing-things.md` | `NOTICE.md`, for the licensing note |
 | Something that looks like a past decision | `docs/decisions.md` |
 | How this repo is documented | `docs/superpowers/specs/2026-09-08-documentation-layout-design.md` |
-| A conceptual HD question | Not here: `../Badwater HD/` (design.plateworks.org). This repo answers "what activated", never "what it means". |
+| A conceptual HD question | Not here: `../../20-29 Properties/23 Plateworks HD/` (design.plateworks.org). This repo answers "what activated", never "what it means". |
 
 New specs are written into `docs/superpowers/specs/` and added to `docs/README.md`.
 
@@ -42,8 +42,10 @@ New specs are written into `docs/superpowers/specs/` and added to `docs/README.m
 
 ## Session logging
 
-Log every session to the repo `plateworks-session-log`. Clone it beside this
-one if it is not present. Its convention file, CONVENTION.md, is
+Log every session to the repo `plateworks-session-log`. On Dom's Mac it is
+checked out at `00-09 System/04 Session Log/` in the workspace; elsewhere,
+clone it beside this one if it is not present. Its convention file,
+CONVENTION.md, is
 self-contained: format, tag set, and procedure. If the repo is unreachable,
 append the entry to `SESSION_LOG.md` here under a heading saying it belongs in
 the log repo, and say the push is pending.

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """docs_check.py: the documentation standard's mechanical checks.
 
-Canonical copy: Badwater OS docs/scripts/docs_check.py. Vendored copies are
-registered in 00_Resources/VENDORED.md. The standard this enforces is
-00_Resources/documentation-standard.md.
+Canonical copy: Plateworks OS 00-09 System/01 Docs/scripts/docs_check.py. Vendored
+copies are registered in 00-09 System/00 Resources/VENDORED.md. The standard this
+enforces is 00-09 System/00 Resources/documentation-standard.md.
 
 Run:  python3 docs_check.py [ROOT] [--budget 2000] [--require docs/architecture.md ...]
-Test: python3 -m unittest docs/scripts/test_docs_check.py
+Test: python3 "00-09 System/01 Docs/scripts/test_docs_check.py"
 
 Findings, by kind:
   no-guide       CLAUDE.md is missing

@@ -49,8 +49,9 @@ architecture doc describes what exists.
 
 ## Canon that lives outside this repo
 
-In the Badwater OS workspace under `00_Resources/`, one folder up on Dom's
-Macs. A clone does not have it.
+In the Plateworks OS workspace, at `../../00-09 System/00 Resources/` from
+this repo on Dom's Mac; quoted here as `00_Resources/` by convention. A clone
+does not have it.
 
 | Document | Governs |
 |---|---|
