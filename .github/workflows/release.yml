@@ -24,7 +24,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Node 24 rather than the CI workflow's Node 20, because OIDC trusted
       # publishing needs npm >= 11.5.1 and Node 20 ships npm 10.x. The explicit
