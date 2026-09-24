@@ -20,7 +20,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Node 20 is the floor declared in package.json engines. Testing the floor
       # catches more than testing the newest release does: if it passes here it
