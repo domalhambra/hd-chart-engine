@@ -20,6 +20,8 @@ Findings, by kind:
                  indexed but not path-checked)
   missing-route  CLAUDE.md does not quote a required document
   budget         CLAUDE.md is at or over its token budget (four characters per token)
+  impact         a file a runbook quotes changed without the runbook changing
+                 and without a Docs-checked trailer naming it (--impact only)
 
 Path extraction is deliberately narrow: only backtick-quoted tokens that look
 like repo paths. Skipped on purpose: URLs and other scheme-prefixed tokens,
@@ -39,6 +41,7 @@ import argparse
 import json
 import os
 import re
+import subprocess
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -179,6 +182,66 @@ def dead_paths(paths: list[str], root: Path, names: set[str], known_absent: set[
     return dead
 
 
+def runbook_files(root: Path, extra: tuple[str, ...] = ()) -> list[str]:
+    """Every docs/runbooks/*.md plus `extra`, root-relative, sorted."""
+    root = Path(root)
+    found: set[str] = set()
+    runbooks = root / "docs" / "runbooks"
+    if runbooks.is_dir():
+        for path in sorted(runbooks.glob("*.md")):
+            found.add(path.relative_to(root).as_posix())
+    for item in extra:
+        found.add(Path(item).as_posix())
+    return sorted(found)
+
+
+def _run_git(root: Path, args: list[str]) -> str:
+    proc = subprocess.run(
+        ["git", *args], cwd=root, capture_output=True, text=True
+    )
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "").strip()
+        raise ValueError(detail or f"git {' '.join(args)} failed")
+    return proc.stdout
+
+
+def impact_findings(
+    root: Path, base: str, extra: tuple[str, ...] = ()
+) -> list[Finding]:
+    """Runbooks whose quoted files changed in BASE...HEAD untouched."""
+    root = Path(root)
+    try:
+        changed_text = _run_git(root, ["diff", "--name-only", f"{base}...HEAD"])
+        log_text = _run_git(
+            root,
+            ["log", f"{base}..HEAD", "--format=%(trailers:key=Docs-checked,valueonly)"],
+        )
+    except ValueError as exc:
+        raise ValueError(f"cannot read range {base}..HEAD: {exc}") from exc
+    changed = [line.strip() for line in changed_text.splitlines() if line.strip()]
+    changed_set = set(changed)
+    checked: set[str] = set()
+    for line in log_text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        checked.add(line.split(",", 1)[0].strip())
+    findings: list[Finding] = []
+    for runbook in runbook_files(root, extra):
+        if runbook in changed_set or runbook in checked:
+            continue
+        path = root / runbook
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        base_dir = Path(runbook).parent.as_posix()
+        quoted = quoted_paths(text, base_dir, root)
+        hits = sorted({q.rstrip("/") for q in quoted} & changed_set)
+        if hits:
+            findings.append(Finding("impact", runbook, ", ".join(hits)))
+    return findings
+
+
 def check_repo(
     root: Path,
     guide: str = "CLAUDE.md",
@@ -256,6 +319,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--budget", type=int, default=2000, help="guide budget in tokens at four characters each")
     ap.add_argument("--require", action="append", default=[], metavar="PATH", help="a doc the guide must quote; repeatable")
     ap.add_argument("--known-absent", action="append", default=list(DEFAULT_KNOWN_ABSENT), metavar="NAME", help="a file allowed to be absent, or a folder prefix ending in / whose contents exist only at runtime; repeatable")
+    ap.add_argument("--impact", metavar="BASE", default=None, help="run only the impact check against BASE...HEAD")
+    ap.add_argument("--runbook", action="append", default=[], metavar="PATH", help="an extra runbook for the impact check; repeatable")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     args = ap.parse_args(argv)
 
@@ -263,10 +328,17 @@ def main(argv: list[str] | None = None) -> int:
     if not root.is_dir():
         print(f"docs_check: {root} is not a directory", file=sys.stderr)
         return 2
-    findings = check_repo(
-        root, guide=args.guide, docs=args.docs, budget=args.budget,
-        require=tuple(args.require), known_absent=tuple(args.known_absent), readme=args.readme,
-    )
+    if args.impact is not None:
+        try:
+            findings = impact_findings(root, args.impact, extra=tuple(args.runbook))
+        except ValueError as exc:
+            print(f"docs_check: {exc}", file=sys.stderr)
+            return 2
+    else:
+        findings = check_repo(
+            root, guide=args.guide, docs=args.docs, budget=args.budget,
+            require=tuple(args.require), known_absent=tuple(args.known_absent), readme=args.readme,
+        )
     if args.json:
         print(json.dumps([asdict(f) for f in findings], indent=2))
     else:

@@ -45,3 +45,12 @@ jobs:
 
       - name: Verify the publish tarball contents
         run: npm pack --dry-run
+
+  docs-impact:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - run: python3 scripts/docs_check.py --impact origin/${{ github.base_ref }}
