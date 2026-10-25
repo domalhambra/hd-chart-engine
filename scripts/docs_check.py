@@ -21,7 +21,9 @@ Findings, by kind:
   missing-route  CLAUDE.md does not quote a required document
   budget         CLAUDE.md is at or over its token budget (four characters per token)
   impact         a file a runbook quotes changed without the runbook changing
-                 and without a Docs-checked trailer naming it (--impact only)
+                 and without a Docs-checked trailer naming it (--impact only).
+                 A changed Markdown file never counts: a doc changing does not
+                 make a runbook that quotes it wrong.
 
 Path extraction is deliberately narrow: only backtick-quoted tokens that look
 like repo paths. Skipped on purpose: URLs and other scheme-prefixed tokens,
@@ -220,6 +222,8 @@ def impact_findings(
         raise ValueError(f"cannot read range {base}..HEAD: {exc}") from exc
     changed = [line.strip() for line in changed_text.splitlines() if line.strip()]
     changed_set = set(changed)
+    # Code, config and data can make a runbook wrong; another doc cannot.
+    behaviour = {c for c in changed_set if not c.lower().endswith(".md")}
     checked: set[str] = set()
     for line in log_text.splitlines():
         line = line.strip()
@@ -236,7 +240,7 @@ def impact_findings(
         text = path.read_text(encoding="utf-8")
         base_dir = Path(runbook).parent.as_posix()
         quoted = quoted_paths(text, base_dir, root)
-        hits = sorted({q.rstrip("/") for q in quoted} & changed_set)
+        hits = sorted({q.rstrip("/") for q in quoted} & behaviour)
         if hits:
             findings.append(Finding("impact", runbook, ", ".join(hits)))
     return findings
